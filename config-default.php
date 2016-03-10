@@ -4,7 +4,7 @@
 
 $host = "localhost";
 $db_name = "gestion";
-$username = "";
-$password = "";
+$username = " ";
+$password = " ";
 
 ?>
