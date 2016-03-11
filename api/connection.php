@@ -7,10 +7,18 @@
 
 include 'config.php';
 
+/*
 $conexion = new mysqli($host, $username, $password, $db_name);
 
 if ($conexion->connect_errno) { // Si se produce algún error finaliza con mensaje de error
     die("Error de Conexión: " . $conexion->connect_error);
 }
-$conexion->set_charset("utf8");
+ * 
+ * 
+ */
+
+$db = new PDO('mysql:host=' . $host . ';dbname=' . $db_name . ';charset=utf8', $username, $password);
+
+
+//$conexion->set_charset("utf8");
 

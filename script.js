@@ -12,7 +12,7 @@ function ProfesorResource($http, $q, baseUrl) {
 
         $http({
             method: 'GET',
-            url: 'http://localhost/cursoangularjs/Server/getProfesor.php?dni=' + dni
+            url: 'http://localhost/cursoangularjs/Server/api/profesor.php/profesores/' + dni
         }).success(function (data, status, headers, config) {
             defered.resolve(data);
         }).error(function (data, status, headers, config) {
@@ -27,7 +27,7 @@ function ProfesorResource($http, $q, baseUrl) {
 
         $http({
             method: 'GET',
-            url: 'http://localhost/cursoangularjs/Server/getProfesores.php'
+            url: 'http://localhost/cursoangularjs/Server/api/profesor.php/profesores'
         }).success(function (data, status, headers, config) {
             defered.resolve(data);
         }).error(function (data, status, headers, config) {

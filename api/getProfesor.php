@@ -27,8 +27,7 @@ function stmt_bind_assoc(&$stmt, &$out) {
 
 $query = "SELECT dni, nombre, apellido1, apellido2, login, email, familia, activo, tutoria "
         . "FROM profesores "
-        . "WHERE dni=? "
-        . "ORDER BY apellido1, apellido2, nombre";
+        . "WHERE dni=?";
 /*
   $result = $conexion->query($query);
 
