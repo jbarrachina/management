@@ -20,6 +20,17 @@
         <span ng-show="form.email.$error.required && form.email.$dirty">El campo es requerido</span>
         <span ng-show="form.email.$error.email">Formato email incorrecto</span>
         <br>
+        <label for="login">login:</label><input id="login" name="login" type="text" ng-model="profesor.login" required/>
+        <span ng-show="form.login.$error.required && form.login.$dirty">El campo es requerido</span>
+        <br>
+        <label for="familia">familia:</label><input id="familia" name="familia" type="text" ng-model="profesor.familia" required/>
+        <span ng-show="form.familia.$error.required && form.familia.$dirty">El campo es requerido</span>
+        <br>
+        <label for="tutoria">tutoria:</label><input id="tutoria" name="tutoria" type="text" ng-model="profesor.tutoria"/>
+        <br>
+        <label for="activo">activo:</label><input id="activo" name="activo" type="numeric" ng-model="profesor.activo" required/>
+        <span ng-show="form.activo.$error.required && form.activo.$dirty">El campo es requerido</span>
+        <br>
     </fieldset>  
 
     <button ng-click="guardarDatos()" name="guardarDatos">Guardar</button>

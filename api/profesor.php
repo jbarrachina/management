@@ -61,7 +61,64 @@ $app->get('/profesores/{dni}', function($request, $response, $args) use($db) {
     $resultados = $consulta->fetchAll(PDO::FETCH_ASSOC);
 
     // Devolvemos ese array asociativo como un string JSON.
-    echo json_encode($resultados);
+    echo json_encode($resultados[0]); //quiero un elemento del array
+});
+
+$app->put('/profesores/{dni}', function($request, $response, $args) use($db) {
+    $data = $request->getParsedBody();
+    $sql = "UPDATE profesores SET "
+            . "dni = ?,"
+            . "nombre = ?,"
+            . "apellido1 = ?,"
+            . "apellido2 = ?,"
+            . "login = ?,"
+            . "email = ?,"
+            . "familia = ?,"
+            . "activo = ?,"
+            . "tutoria = ? "
+            . "WHERE dni = ?";
+    $consulta = $db->prepare($sql);
+    // En el execute es dónde asociamos el :param1 con el valor que le toque.
+    $consulta->execute(array(
+        $data['dni'],
+        $data['nombre'],
+        $data['apellido1'],
+        $data['apellido2'],
+        $data['login'],
+        $data['email'],
+        $data['familia'],
+        $data['activo'],
+        $data['tutoria'],
+        $data['dni']
+    ));
+});
+
+$app->post('/profesores/{dni}', function($request, $response, $args) use($db) {
+    $data = $request->getParsedBody();
+    $sql = "INSERT INTO profesores SET "
+            . "dni = ?,"
+            . "nombre = ?,"
+            . "apellido1 = ?,"
+            . "apellido2 = ?,"
+            . "login = ?,"
+            . "email = ?,"
+            . "familia = ?,"
+            . "activo = ?,"
+            . "tutoria = ? ";
+    $consulta = $db->prepare($sql);
+    // En el execute es dónde asociamos el :param1 con el valor que le toque.
+    $consulta->execute(array(
+        $data['dni'],
+        $data['nombre'],
+        $data['apellido1'],
+        $data['apellido2'],
+        $data['login'],
+        $data['email'],
+        $data['familia'],
+        $data['activo'],
+        $data['tutoria'],
+    ));
+    
 });
 
 $app->run();

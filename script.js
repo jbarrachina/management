@@ -5,6 +5,7 @@
  */
 
 var app = angular.module("app", ['ngRoute']);
+
 function ProfesorResource($http, $q, baseUrl) {
     this.get = function (dni) {
         var defered = $q.defer();
@@ -35,6 +36,27 @@ function ProfesorResource($http, $q, baseUrl) {
         });
         return promise;
     }
+
+    this.update = function (dni, profesor) {
+        var defered = $q.defer();
+        var promise = defered.promise;
+
+        $http({
+            method: 'PUT',
+            url: 'http://localhost/cursoangularjs/Server/api/profesor.php/profesores/' + dni,
+            data: profesor
+        }).success(function (data, status, headers, config) {
+            defered.resolve(data);
+        }).error(function (data, status, headers, config) {
+            if (status === 400) {
+                defered.reject(data);
+            } else {
+                throw new Error("Fallo obtener los datos:" + status + "\n" + data);
+            }
+        });
+        return promise;
+    };
+
 }
 
 function ProfesorResourceProvider() {
@@ -73,7 +95,7 @@ app.config(['$routeProvider', function ($routeProvider) {
 
         $routeProvider.when('/gestion/detalle/:dni', {
             templateUrl: "detalle.html",
-            controller: "DetalleProfesorController",
+            controller: "EditProfesorController",
             resolve: {
                 profesor: ['profesorResource', '$route', function (profesorResource, $route) {
                         return profesorResource.get($route.current.params.dni);
@@ -92,12 +114,18 @@ app.run(["$rootScope", "urlLogo", function ($rootScope, urlLogo) {
         $rootScope.urlLogo = urlLogo;
     }]);
 
-app.controller("DetalleProfesorController", ["$scope", "profesor", "$q", function ($scope, profesor, $q) {
+app.controller("EditProfesorController", ["$scope", "profesor", 'profesorResource', '$location', "$q", function ($scope, profesor, profesorResource, $location, $q) {
 
         $scope.profesor = profesor;
 
         $scope.guardarDatos = function () {
-            alert("Se han guardado los datos");
+            if ($scope.form.$valid) {
+                profesorResource.update($scope.profesor.dni, $scope.profesor).then(function () {
+                    $location.path("/gestion/listado");
+                });
+            } else {
+                alert("Hay datos inválidos");
+            }
         };
     }
 ]);
