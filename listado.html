@@ -1,13 +1,14 @@
 <h1>Listado</h1>
 <input type="text" ng-model="filtroNombreProfesor">
-<table>
-    <tr ng-repeat="profesor in profesores | filter : consultaProfesor" ng-style="{color:($odd?'black':'darkblue')}">
+<table class="table table-striped">
+    <tr ng-repeat="profesor in profesores| filter : consultaProfesor" ng-style="{color:($scope.profesor.activo == 0? 'red':($odd?'black':'darkblue'))}">
         <td><a ng-href ="#/gestion/detalle/{{profesor.dni}}">{{profesor.dni}}</a></td>
         <td>{{profesor.apellido1 + ' ' + profesor.apellido2 + ', ' + profesor.nombre}}</td>
-        <td>{{profesor.familia }}</td>
-        <td>{{profesor.login }}</td>
-        <td>{{profesor.email }}</td>
-        <td>{{profesor.tutoria }}</td>
+        <td>{{profesor.familia}}</td>
+        <td>{{profesor.login}}</td>
+        <td>{{profesor.email}}</td>
+        <td>{{profesor.tutoria}}</td>
+        <td>{{profesor.activo}}</td>
     </tr>
 </table>
 

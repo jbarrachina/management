@@ -109,7 +109,7 @@ app.config(['$routeProvider', function ($routeProvider) {
 
     }]);
 
-app.value("urlLogo", "logo_banco.jpg");
+app.value("urlLogo", "images/logoausias.png");
 app.run(["$rootScope", "urlLogo", function ($rootScope, urlLogo) {
         $rootScope.urlLogo = urlLogo;
     }]);
@@ -117,6 +117,13 @@ app.run(["$rootScope", "urlLogo", function ($rootScope, urlLogo) {
 app.controller("EditProfesorController", ["$scope", "profesor", 'profesorResource', '$location', "$q", function ($scope, profesor, profesorResource, $location, $q) {
 
         $scope.profesor = profesor;
+
+        $scope.$watch(function () {
+            return $scope.profesor.activo;
+        }, function () {
+            $scope.profesor.activo = Number($scope.profesor.activo);
+            //console.log($scope.profesor.activo, typeof $scope.profesor.activo);
+        }, true);
 
         $scope.guardarDatos = function () {
             if ($scope.form.$valid) {
