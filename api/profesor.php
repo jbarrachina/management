@@ -93,7 +93,7 @@ $app->put('/profesores/{dni}', function($request, $response, $args) use($db) {
     ));
 });
 
-$app->post('/profesores/{dni}', function($request, $response, $args) use($db) {
+$app->post('/profesores', function($request, $response, $args) use($db) {
     $data = $request->getParsedBody();
     $sql = "INSERT INTO profesores SET "
             . "dni = ?,"

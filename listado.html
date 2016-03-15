@@ -1,16 +1,38 @@
-<h1>Listado</h1>
-<input type="text" ng-model="filtroNombreProfesor">
+
+<div class="row">
+    <div class="col-xs-4">
+        <h3>Página: {{ currentPage}}</h3>
+    </div>
+    <div class="col-xs-2">
+        <button type="button" class="btn btn-primary" ng-click="addProfesor()" name="Add"> Añadir Profesor</button>
+    </div>    
+    <div class="col-xs-4">
+        <label for="search">Filtro:</label>
+        <input type="text" ng-model="filtroNombreProfesor" id="search" class="form-control" placeholder="Filter text">
+    </div>
+    <div class="col-xs-2">
+        <label for="search">items por página:</label>
+        <input type="number" min="1" max="20" class="form-control" ng-model="pageSize">
+    </div>
+</div>
+<br>
 <table class="table table-striped">
-    <tr ng-repeat="profesor in profesores| filter : consultaProfesor" ng-style="{color:($scope.profesor.activo == 0? 'red':($odd?'black':'darkblue'))}">
+    <!--<tr ng-repeat="profesor in profesores| filter : consultaProfesor" ng-style="{color:(profesor.activo === '0' ) ? 'red' : ($odd ? 'darkblue':'black') }">-->
+    <tr dir-paginate="profesor in profesores | filter : consultaProfesor | itemsPerPage: pageSize" ng-style="{color:(profesor.activo === '0') ? 'red' : ($odd ? 'darkblue':'black') } ">
         <td><a ng-href ="#/gestion/detalle/{{profesor.dni}}">{{profesor.dni}}</a></td>
         <td>{{profesor.apellido1 + ' ' + profesor.apellido2 + ', ' + profesor.nombre}}</td>
         <td>{{profesor.familia}}</td>
         <td>{{profesor.login}}</td>
         <td>{{profesor.email}}</td>
         <td>{{profesor.tutoria}}</td>
-        <td>{{profesor.activo}}</td>
+        <!--<td>{{profesor.activo}}</td>-->
     </tr>
 </table>
 
+<div ng-controller="OtherController" class="other-controller">
+    <div class="text-center">
+        <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="bower_components/angularUtils-pagination/dirPagination.tpl.html"></dir-pagination-controls>
+    </div>
+</div>
 
 

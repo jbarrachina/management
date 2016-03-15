@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-var app = angular.module("app", ['ngRoute']);
+var app = angular.module("app", ['ngRoute', 'angularUtils.directives.dirPagination']);
 
 function ProfesorResource($http, $q, baseUrl) {
     this.get = function (dni) {
@@ -57,6 +57,27 @@ function ProfesorResource($http, $q, baseUrl) {
         return promise;
     };
 
+    this.insert = function (profesor) {
+        var defered = $q.defer();
+        var promise = defered.promise;
+
+        $http({
+            method: 'POST',
+            url: 'http://localhost/cursoangularjs/Server/api/profesor.php/profesores',
+            data: profesor
+        }).success(function (data, status, headers, config) {
+            defered.resolve(data);
+        }).error(function (data, status, headers, config) {
+            if (status === 400) {
+                defered.reject(data);
+            } else {
+                throw new Error("Fallo obtener los datos:" + status + "\n" + data);
+            }
+        });
+
+        return promise;
+    };
+
 }
 
 function ProfesorResourceProvider() {
@@ -103,6 +124,16 @@ app.config(['$routeProvider', function ($routeProvider) {
             }
         });
 
+        $routeProvider.when('/gestion/nuevo', {
+            templateUrl: "detalle.html",
+            controller: "NuevoProfesorController",
+            resolve: {
+                profesor: ['profesorResource', '$route', function (profesorResource, $route) {
+                        return profesorResource.get($route.current.params.dni);
+                    }]
+            }
+        });
+
         $routeProvider.otherwise({
             redirectTo: '/'
         });
@@ -137,11 +168,37 @@ app.controller("EditProfesorController", ["$scope", "profesor", 'profesorResourc
     }
 ]);
 
-app.controller("ListadoProfesoresController", ['$scope', 'profesores', '$q', function ($scope, profesores, $q) {
+app.controller("NuevoProfesorController", ["$scope", 'profesorResource', '$location', "$q", function ($scope, profesorResource, $location, $q) {
+        
+        $scope.profesor = {
+            dni: "",
+            nombre: "",
+            apellido1: "",
+            apellido2: "",
+            login: "",
+            email: "@ausiasmarch.net",
+            familia: "SAN",
+            tutoria: "",
+            activo: 1
+            };
+
+        $scope.guardarDatos = function () {
+            if ($scope.form.$valid) {
+                profesorResource.insert($scope.profesor).then(function () {
+                    $location.path("/gestion/listado");
+                });
+            } else {
+                alert("Hay datos inválidos");
+            }
+        };
+    }]);
+
+app.controller("ListadoProfesoresController", ['$scope', 'profesores', '$location', '$q', function ($scope, profesores, $location, $q) {
         $scope.profesores = [];
         $scope.filtroNombreProfesor = "";
         $scope.profesores = profesores;
-
+        $scope.currentPage = 1;
+        $scope.pageSize = 15;
         /** Transforma el texto quitando todos los acentos diéresis, etc. **/
         function normalize(texto) {
             texto = texto.toLowerCase();
@@ -163,8 +220,20 @@ app.controller("ListadoProfesoresController", ['$scope', 'profesores', '$q', fun
                 return false;
             }
         }
+        
+        $scope.addProfesor = function(){
+            $location.path('/gestion/nuevo');
+        }
     }
 ]);
+
+function OtherController($scope) {
+    $scope.pageChangeHandler = function (num) {
+        console.log('going to page ' + num);
+    };
+}
+
+app.controller('OtherController', OtherController);
 
 app.controller("MainProfesorController", ['$scope', function ($scope) {
     }
