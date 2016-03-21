@@ -116,8 +116,14 @@ $app->post('/profesores', function($request, $response, $args) use($db) {
         $data['email'],
         $data['familia'],
         $data['activo'],
-        $data['tutoria'],
+        $data['tutoria']
     ));
+    
+    //Creamos una línea por profesor nuevo en el ficher swap/swap.txt
+    if($fp=fopen('swap/swap.txt',a)){
+        fwrite($fp,$data['login']."\n");
+        fclose($fp);
+    }
     
 });
 

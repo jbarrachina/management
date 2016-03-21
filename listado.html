@@ -1,12 +1,30 @@
 
 <div class="row">
-    <div class="col-xs-4">
-        <h3>Página: {{ currentPage}}</h3>
+    <div class="col-xs-2">
+        <h4>Página: {{ currentPage}}</h4>
     </div>
     <div class="col-xs-2">
-        <button type="button" class="btn btn-primary" ng-click="addProfesor()" name="Add"> Añadir Profesor</button>
+        <label for="familia" class="col-sm-2">familia:</label>
+        <select id="familia" name="familia" type="text" ng-model="filtro.familia" class="form-control" >
+            <option value="Todos">Todos</option>
+            <option value="SAN">Sanidad</option>
+            <option value="INF">Informática</option>
+            <option value="COM">Comercio</option>
+            <option value="ADM">Administración</option>
+            <option value="FOL">FOL</option>
+            <option value="IDI">Idiomas</option>
+            <option value="ORI">Orientación</option>
+        </select>
+    </div> 
+    <div class="col-xs-2">
+        <label for="activo" class="col-sm-2">Situación:</label>
+        <select id="activo" name="activo" type="text" ng-model="filtro.activo" class="form-control" >
+            <option value="-1">Todos</option>
+            <option value="1">Activo</option>
+            <option value="0">Inactivos</option>
+        </select>
     </div>    
-    <div class="col-xs-4">
+    <div class="col-xs-2">
         <label for="search">Filtro:</label>
         <input type="text" ng-model="filtroNombreProfesor" id="search" class="form-control" placeholder="Filter text">
     </div>
@@ -14,6 +32,9 @@
         <label for="search">items por página:</label>
         <input type="number" min="1" max="20" class="form-control" ng-model="pageSize">
     </div>
+    <div class="col-xs-2">
+        <button type="button" class="btn btn-primary" ng-click="addProfesor()" name="Add"> Añadir Profesor</button>
+    </div> 
 </div>
 <br>
 <table class="table table-striped">

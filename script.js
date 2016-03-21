@@ -13,7 +13,7 @@ function ProfesorResource($http, $q, baseUrl) {
 
         $http({
             method: 'GET',
-            url: 'http://localhost/cursoangularjs/Server/api/profesor.php/profesores/' + dni
+            url: baseUrl + '/api/profesor.php/profesores/' + dni
         }).success(function (data, status, headers, config) {
             defered.resolve(data);
         }).error(function (data, status, headers, config) {
@@ -28,7 +28,7 @@ function ProfesorResource($http, $q, baseUrl) {
 
         $http({
             method: 'GET',
-            url: 'http://localhost/cursoangularjs/Server/api/profesor.php/profesores'
+            url: baseUrl + '/api/profesor.php/profesores'
         }).success(function (data, status, headers, config) {
             defered.resolve(data);
         }).error(function (data, status, headers, config) {
@@ -43,7 +43,7 @@ function ProfesorResource($http, $q, baseUrl) {
 
         $http({
             method: 'PUT',
-            url: 'http://localhost/cursoangularjs/Server/api/profesor.php/profesores/' + dni,
+            url: baseUrl + '/api/profesor.php/profesores/' + dni,
             data: profesor
         }).success(function (data, status, headers, config) {
             defered.resolve(data);
@@ -63,7 +63,7 @@ function ProfesorResource($http, $q, baseUrl) {
 
         $http({
             method: 'POST',
-            url: 'http://localhost/cursoangularjs/Server/api/profesor.php/profesores',
+            url: baseUrl + '/api/profesor.php/profesores',
             data: profesor
         }).success(function (data, status, headers, config) {
             defered.resolve(data);
@@ -91,7 +91,7 @@ function ProfesorResourceProvider() {
 }
 
 app.provider("profesorResource", ProfesorResourceProvider);
-app.constant("baseUrl", ".");
+app.constant("baseUrl", "http://localhost/cursoangularjs/Server");
 app.config(['baseUrl', 'profesorResourceProvider', function (baseUrl, profesorResourceProvider) {
         profesorResourceProvider.setBaseUrl(baseUrl);
     }
@@ -199,6 +199,11 @@ app.controller("ListadoProfesoresController", ['$scope', 'profesores', '$locatio
         $scope.profesores = profesores;
         $scope.currentPage = 1;
         $scope.pageSize = 15;
+        
+        $scope.filtro = {
+            familia: "Todos",
+            activo: -1
+        }
         /** Transforma el texto quitando todos los acentos diéresis, etc. **/
         function normalize(texto) {
             texto = texto.toLowerCase();
@@ -211,7 +216,7 @@ app.controller("ListadoProfesoresController", ['$scope', 'profesores', '$locatio
             return texto;
         }
 
-        $scope.consultaProfesor = function (value) {
+        $scope.consultaNombre = function (value) {
             //búsqueda insensible a mayúsculas o minúsculas.
             if ((normalize(value.nombre).includes(normalize($scope.filtroNombreProfesor))) || (normalize(value.apellido1).includes(normalize($scope.filtroNombreProfesor)))
                     || normalize(value.apellido2).includes(normalize($scope.filtroNombreProfesor))) {
@@ -220,6 +225,37 @@ app.controller("ListadoProfesoresController", ['$scope', 'profesores', '$locatio
                 return false;
             }
         }
+        
+        $scope.consultaFamilia = function (value) {
+            //búsqueda insensible a mayúsculas o minúsculas.
+            if ((value.familia==$scope.filtro.familia) || ($scope.filtro.familia=="Todos")) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        
+         $scope.consultaSituacion = function (value) {
+            //búsqueda insensible a mayúsculas o minúsculas.
+            console.log('(' +$scope.filtro.activo+")");
+            if ((value.activo==$scope.filtro.activo) || ($scope.filtro.activo==-1)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+
+        $scope.consultaProfesor = function (value) {
+            //búsqueda insensible a mayúsculas o minúsculas.
+            if ($scope.consultaNombre(value) && $scope.consultaFamilia(value) && $scope.consultaSituacion(value)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        
+        
         
         $scope.addProfesor = function(){
             $location.path('/gestion/nuevo');
